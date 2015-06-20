@@ -2,11 +2,9 @@
 
 简单的自动化集成工具，支持GitHub和BitBucket
 
-# 使用方法
+# 安装
 
-## 安装
-
-### 编译安装
+编译安装
 
 ```shell
 $export GOPATH=/path/to/you/gopath
@@ -14,11 +12,11 @@ $go get -u github.com/imzjy/goci
 $./bin/goci
 ```
 
-### 二进制文件
+二进制文件
 
 [Linux 64](https://github.com/imzjy/goci/releases)
 
-## 配置
+# 配置Webhooks
 
 在GitHub或者BitBucket的仓库中设置Webhooks，目前只支持push event。
 
