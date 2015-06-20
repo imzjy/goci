@@ -12,9 +12,9 @@ $go get -u github.com/imzjy/goci
 $./bin/goci
 ```
 
-二进制文件
+直接下载
 
-[Linux 64](https://github.com/imzjy/goci/releases)
+- [Linux 64](https://github.com/imzjy/goci/releases)
 
 # 配置Webhooks
 
