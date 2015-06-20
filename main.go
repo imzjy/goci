@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+	// "fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -10,13 +11,17 @@ var config = CiConfg{}
 
 func BitBucket(w http.ResponseWriter, r *http.Request) {
 	log.Println("======bitbucket payload======")
-	log.Println(string(r.Body))
+	defer r.Body.Close()
+	body, _ := ioutil.ReadAll(r.Body)
+	log.Println(string(body))
 	log.Println("======end payload======")
 }
 
 func GitHub(w http.ResponseWriter, r *http.Request) {
 	log.Println("======github payload======")
-	log.Println(string(r.Body))
+	defer r.Body.Close()
+	body, _ := ioutil.ReadAll(r.Body)
+	log.Println(string(body))
 	log.Println("======end payload======")
 }
 
@@ -32,5 +37,5 @@ func main() {
 	http.HandleFunc("/github", GitHub)
 
 	log.Println("goci start to listening on port", config.Port)
-	log.Fatal(http.ListenAndServe(":" + config.Port, nil))
+	log.Fatal(http.ListenAndServe(":"+config.Port, nil))
 }
