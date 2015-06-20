@@ -13,8 +13,21 @@ func BitBucket(w http.ResponseWriter, r *http.Request) {
 	log.Println("======bitbucket payload======")
 	defer r.Body.Close()
 	body, _ := ioutil.ReadAll(r.Body)
-	notify, _ := ParseBitBucket(body)
+	notify, _ := ParseBitBucketPayload(body)
 	log.Println(notify)
+
+	trigger, err := GetMatchedTrigger(config, notify)
+	if err != nil {
+		//ignore
+		log.Println("no trigger for notify:", notify)
+	}
+
+	if trigger.Type == "local" {
+		ExecLocal(trigger.Cmd, "")
+	}
+	if trigger.Type == "ssh" {
+		ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey)
+	}
 	log.Println("======end payload======")
 }
 
@@ -22,7 +35,22 @@ func GitHub(w http.ResponseWriter, r *http.Request) {
 	log.Println("======github payload======")
 	defer r.Body.Close()
 	body, _ := ioutil.ReadAll(r.Body)
-	log.Println(string(body))
+	notify, _ := ParseGitHubPayload(body)
+	log.Println(notify)
+
+	trigger, err := GetMatchedTrigger(config, notify)
+	if err != nil {
+		//ignore
+		log.Println("no trigger for notify:", notify)
+	}
+
+	if trigger.Type == "local" {
+		ExecLocal(trigger.Cmd, "")
+	}
+	if trigger.Type == "ssh" {
+		ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey)
+	}
+
 	log.Println("======end payload======")
 }
 

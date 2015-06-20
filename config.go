@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"errors"
 )
 
 type CiConfg struct {
@@ -46,4 +47,17 @@ func LoadConfig() (*CiConfg, error) {
 	err = json.Unmarshal(cfgContent, &cfg)
 
 	return cfg, err
+}
+
+func GetMatchedTrigger(cfg CiConfg, notify Notify) (Trigger, error){
+	
+	for _, trigger := range cfg.Triggers {
+		if notify.Repository == trigger.Repository &&
+			notify.Branch == trigger.Branch {
+				return trigger, nil
+			}
+	}
+
+	return Trigger{}, errors.New("no matched trigger found")
+
 }
