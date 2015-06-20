@@ -1,0 +1,23 @@
+{
+	"port":"8080",
+	"triggers":
+		[
+			{
+				"issuer" :     "bitbucket",
+				"Repository" : "imzjy/wschat",
+				"Branch" :     "master",
+				"Type" :       "local",
+				"Cmd" :        "ps aux"
+			},
+			{
+				"Issuer" :     "github",
+				"Repository" : "imzjy/s3cl",
+				"Branch" :     "online",
+				"Type" :       "ssh",
+				"SshUser" :    "zjy",
+				"SshHost" :    "www.imzjy.com",
+				"SshKey" :     "~/.ssh/id_rsa",
+				"Cmd" :        "ps aux"
+			}
+		]
+}
