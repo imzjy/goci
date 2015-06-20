@@ -13,7 +13,8 @@ func BitBucket(w http.ResponseWriter, r *http.Request) {
 	log.Println("======bitbucket payload======")
 	defer r.Body.Close()
 	body, _ := ioutil.ReadAll(r.Body)
-	log.Println(string(body))
+	notify, _ := ParseBitBucket(body)
+	log.Println(notify)
 	log.Println("======end payload======")
 }
 
