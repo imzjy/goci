@@ -2,10 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
-	"errors"
 )
 
 type CiConfg struct {
@@ -49,14 +50,16 @@ func LoadConfig() (*CiConfg, error) {
 	return cfg, err
 }
 
-func GetMatchedTrigger(cfg CiConfg, notify Notify, issuer string) (Trigger, error){
-	
+func GetMatchedTrigger(cfg CiConfg, notify Notify, issuer string) (Trigger, error) {
+
 	for _, trigger := range cfg.Triggers {
+		log.Println("trigger:", trigger)
+		log.Println("notify:", notify)
 		if trigger.Repository == notify.Repository &&
 			trigger.Issuer == issuer &&
 			trigger.Branch == notify.Branch {
-				return trigger, nil
-			}
+			return trigger, nil
+		}
 	}
 
 	return Trigger{}, errors.New("no matched trigger found")

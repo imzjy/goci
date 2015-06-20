@@ -10,48 +10,44 @@ import (
 var config = CiConfg{}
 
 func BitBucket(w http.ResponseWriter, r *http.Request) {
-	log.Println("======bitbucket payload======")
 	defer r.Body.Close()
 	body, _ := ioutil.ReadAll(r.Body)
 	notify, _ := ParseBitBucketPayload(body)
-	log.Println(notify)
 
 	trigger, err := GetMatchedTrigger(config, notify, "bitbucket")
 	if err != nil {
-		//ignore
 		log.Println("no trigger for notify:", notify)
+		return
 	}
 
 	if trigger.Type == "local" {
-		ExecLocal(trigger.Cmd, "")
+		log.Println(ExecLocal(trigger.Cmd, ""))
 	}
 	if trigger.Type == "ssh" {
-		ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey)
+		log.Println(ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey))
 	}
-	log.Println("======end payload======")
+	log.Println("======bitbucket======")
 }
 
 func GitHub(w http.ResponseWriter, r *http.Request) {
-	log.Println("======github payload======")
 	defer r.Body.Close()
 	body, _ := ioutil.ReadAll(r.Body)
 	notify, _ := ParseGitHubPayload(body)
-	log.Println(notify)
 
 	trigger, err := GetMatchedTrigger(config, notify, "github")
 	if err != nil {
-		//ignore
 		log.Println("no trigger for notify:", notify)
+		return
 	}
 
 	if trigger.Type == "local" {
-		ExecLocal(trigger.Cmd, "")
+		log.Println(ExecLocal(trigger.Cmd, ""))
 	}
 	if trigger.Type == "ssh" {
-		ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey)
+		log.Println(ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey))
 	}
 
-	log.Println("======end payload======")
+	log.Println("======github======")
 }
 
 func main() {
