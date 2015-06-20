@@ -53,8 +53,8 @@ func LoadConfig() (*CiConfg, error) {
 func GetMatchedTrigger(cfg CiConfg, notify Notify, issuer string) (Trigger, error) {
 
 	for _, trigger := range cfg.Triggers {
-		log.Println("trigger:", trigger)
-		log.Println("notify:", notify)
+		// log.Println("trigger:", trigger)
+		// log.Println("notify:", notify)
 		if trigger.Repository == notify.Repository &&
 			trigger.Issuer == issuer &&
 			trigger.Branch == notify.Branch {
