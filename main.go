@@ -50,13 +50,18 @@ func GitHub(w http.ResponseWriter, r *http.Request) {
 	log.Println("======github======")
 }
 
+func SetConfig(cfg CiConfg) {
+	config = cfg
+}
+
 func main() {
 
-	config, err := LoadConfig()
+	config, err := LoadConfig()   //CAUTION!!!config is totally new variable, instead of global variable
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Println(config)
+	SetConfig(*config)
 
 	http.HandleFunc("/bitbucket", BitBucket)
 	http.HandleFunc("/github", GitHub)
