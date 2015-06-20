@@ -49,15 +49,15 @@ func LoadConfig() (*CiConfg, error) {
 	return cfg, err
 }
 
-func GetMatchedTrigger(cfg CiConfg, notify Notify) (Trigger, error){
+func GetMatchedTrigger(cfg CiConfg, notify Notify, issuer string) (Trigger, error){
 	
 	for _, trigger := range cfg.Triggers {
-		if notify.Repository == trigger.Repository &&
-			notify.Branch == trigger.Branch {
+		if trigger.Repository == notify.Repository &&
+			trigger.Issuer == issuer &&
+			trigger.Branch == notify.Branch {
 				return trigger, nil
 			}
 	}
 
 	return Trigger{}, errors.New("no matched trigger found")
-
 }

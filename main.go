@@ -16,7 +16,7 @@ func BitBucket(w http.ResponseWriter, r *http.Request) {
 	notify, _ := ParseBitBucketPayload(body)
 	log.Println(notify)
 
-	trigger, err := GetMatchedTrigger(config, notify)
+	trigger, err := GetMatchedTrigger(config, notify, "bitbucket")
 	if err != nil {
 		//ignore
 		log.Println("no trigger for notify:", notify)
@@ -38,7 +38,7 @@ func GitHub(w http.ResponseWriter, r *http.Request) {
 	notify, _ := ParseGitHubPayload(body)
 	log.Println(notify)
 
-	trigger, err := GetMatchedTrigger(config, notify)
+	trigger, err := GetMatchedTrigger(config, notify, "github")
 	if err != nil {
 		//ignore
 		log.Println("no trigger for notify:", notify)
