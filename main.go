@@ -10,6 +10,8 @@ import (
 var config = CiConfg{}
 
 func BitBucket(w http.ResponseWriter, r *http.Request) {
+	log.Println("======bitbucket notify======")
+
 	defer r.Body.Close()
 	body, _ := ioutil.ReadAll(r.Body)
 	notify, _ := ParseBitBucketPayload(body)
@@ -26,10 +28,11 @@ func BitBucket(w http.ResponseWriter, r *http.Request) {
 	if trigger.Type == "ssh" {
 		log.Println(ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey))
 	}
-	log.Println("======bitbucket======")
 }
 
 func GitHub(w http.ResponseWriter, r *http.Request) {
+	log.Println("======github notify======")
+
 	defer r.Body.Close()
 	body, _ := ioutil.ReadAll(r.Body)
 	notify, _ := ParseGitHubPayload(body)
@@ -46,22 +49,17 @@ func GitHub(w http.ResponseWriter, r *http.Request) {
 	if trigger.Type == "ssh" {
 		log.Println(ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey))
 	}
-
-	log.Println("======github======")
-}
-
-func SetConfig(cfg CiConfg) {
-	config = cfg
 }
 
 func main() {
 
-	config, err := LoadConfig()   //CAUTION!!!config is totally new variable, instead of global variable
+	StartLog()
+
+	cfg, err := LoadConfig() //CAUTION!!! if variable name as config, config will totally new variable, instead of global variable
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(config)
-	SetConfig(*config)
+	config = *cfg
 
 	http.HandleFunc("/bitbucket", BitBucket)
 	http.HandleFunc("/github", GitHub)
