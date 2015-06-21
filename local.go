@@ -6,9 +6,9 @@ import (
 	"strings"
 )
 
-func execLocalCmd(cmd, dir string) []byte {
+func execLocalCmd(cmd, dir string) ([]byte, error) {
 	log.Println("command is ", cmd)
-	// splitting head => g++ parts => rest of the command
+	// splitting to head(cmd) and parts(args)
 	parts := strings.Fields(cmd)
 	head := parts[0]
 	parts = parts[1:len(parts)]
@@ -17,13 +17,13 @@ func execLocalCmd(cmd, dir string) []byte {
 	exector.Dir = dir
 	out, err := exector.Output()
 	if err != nil {
-		log.Panic(err)
+		return []byte{}, err
 	}
-	return out
+	return out, nil
 }
 
-func ExecLocal(script, dir string) string {
-	out := execLocalCmd(script, dir)
+func ExecLocal(script, dir string) ([]byte, error) {
+	out, err := execLocalCmd(script, dir)
 
-	return string(out)
+	return out, err
 }

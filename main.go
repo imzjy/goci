@@ -1,7 +1,7 @@
 package main
 
 import (
-	// "fmt"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -11,10 +11,19 @@ var config = CiConfg{}
 
 func BitBucket(w http.ResponseWriter, r *http.Request) {
 	log.Println("======bitbucket notify======")
-
 	defer r.Body.Close()
-	body, _ := ioutil.ReadAll(r.Body)
-	notify, _ := ParseBitBucketPayload(body)
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("read request error:", err.Error())
+		return
+	}
+
+	notify, err := ParseGitHubPayload(body)
+	if err != nil {
+		log.Println("parse payload error:", err.Error())
+		return
+	}
 
 	trigger, err := GetMatchedTrigger(config, notify, "bitbucket")
 	if err != nil {
@@ -22,32 +31,70 @@ func BitBucket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var cmdOut []byte = []byte{}
+	var cmdErr error = nil
 	if trigger.Type == "local" {
-		log.Println(ExecLocal(trigger.Cmd, ""))
+		cmdOut, cmdErr = ExecLocal(trigger.Cmd, "")
 	}
+
 	if trigger.Type == "ssh" {
-		log.Println(ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey))
+		cmdOut, cmdErr = ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey)
+	}
+
+	if cmdOut != nil {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, "%s", cmdErr.Error())
+		log.Println("local execution error:", cmdErr.Error())
+	} else {
+		fmt.Fprintf(w, "%s", string(cmdOut))
+		log.Println(string(cmdOut))
 	}
 }
 
 func GitHub(w http.ResponseWriter, r *http.Request) {
 	log.Println("======github notify======")
-
 	defer r.Body.Close()
-	body, _ := ioutil.ReadAll(r.Body)
-	notify, _ := ParseGitHubPayload(body)
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("read request error:", err.Error())
+		return
+	}
+
+	notify, err := ParseGitHubPayload(body)
+	if err != nil {
+		log.Println("parse payload error:", err.Error())
+		return
+	}
+
+	if notify.Ping {
+		fmt.Fprintf(w, "%s", "ping ok!")
+		return
+	}
 
 	trigger, err := GetMatchedTrigger(config, notify, "github")
 	if err != nil {
 		log.Println("no trigger for notify:", notify)
 		return
 	}
-
+	
+	var cmdOut []byte = []byte{}
+	var cmdErr error = nil
 	if trigger.Type == "local" {
-		log.Println(ExecLocal(trigger.Cmd, ""))
+		cmdOut, cmdErr = ExecLocal(trigger.Cmd, "")
 	}
+
 	if trigger.Type == "ssh" {
-		log.Println(ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey))
+		cmdOut, cmdErr = ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey)
+	}
+
+	if cmdOut != nil {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, "%s", cmdErr.Error())
+		log.Println("local execution error:", cmdErr.Error())
+	} else {
+		fmt.Fprintf(w, "%s", string(cmdOut))
+		log.Println(string(cmdOut))
 	}
 }
 

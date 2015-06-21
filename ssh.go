@@ -27,18 +27,15 @@ func (s *SSHCommander) Command(cmd ...string) *exec.Cmd {
 	return exec.Command("ssh", arg...)
 }
 
-func execSshRemote(user, host, keypath string, cmd []string) string {
+func execSshRemote(user, host, keypath string, cmd []string) ([]byte, error) {
+	
 	commander := SSHCommander{user, host, keypath}
-
 	exector := commander.Command(cmd...)
-	out, err := exector.Output()
-	if err != nil {
-		log.Panic(err)
-	}
-	return string(out)
+
+	return exector.Output()
 }
 
-func ExecSsh(user, host, cmd, keypath string) string {
+func ExecSsh(user, host, cmd, keypath string) ([]byte, error) {
 	log.Println("ssh exec:", cmd)
 
 	return execSshRemote(user, host, keypath, strings.Fields(cmd))
