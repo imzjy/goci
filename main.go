@@ -19,7 +19,7 @@ func BitBucket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	notify, err := ParseGitHubPayload(body)
+	notify, err := ParseBitBucketPayload(body)
 	if err != nil {
 		log.Println("parse payload error:", err.Error())
 		return
@@ -77,7 +77,7 @@ func GitHub(w http.ResponseWriter, r *http.Request) {
 		log.Println("no trigger for notify:", notify)
 		return
 	}
-	
+
 	var cmdOut []byte = []byte{}
 	var cmdErr error = nil
 	if trigger.Type == "local" {

@@ -37,6 +37,11 @@ func ParseGitHubPayload(body []byte) (Notify, error) {
 		return notify, err
 	}
 
+	if _, ok := result["zen"]; ok {
+		notify.Ping = true
+		return notify, nil
+	}
+
 	notify.Repository = result["repository"].(map[string]interface{})["full_name"].(string)
 	notify.Branch = strings.Split(result["ref"].(string), "/")[2]
 
