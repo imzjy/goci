@@ -41,7 +41,7 @@ func BitBucket(w http.ResponseWriter, r *http.Request) {
 		cmdOut, cmdErr = ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey)
 	}
 
-	if cmdOut != nil {
+	if cmdErr != nil {
 		w.WriteHeader(500)
 		fmt.Fprintf(w, "%s", cmdErr.Error())
 		log.Println("local execution error:", cmdErr.Error())
@@ -88,7 +88,7 @@ func GitHub(w http.ResponseWriter, r *http.Request) {
 		cmdOut, cmdErr = ExecSsh(trigger.SshUser, trigger.SshHost, trigger.Cmd, trigger.SshKey)
 	}
 
-	if cmdOut != nil {
+	if cmdErr != nil {
 		w.WriteHeader(500)
 		fmt.Fprintf(w, "%s", cmdErr.Error())
 		log.Println("local execution error:", cmdErr.Error())
