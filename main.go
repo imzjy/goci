@@ -32,6 +32,9 @@ func BitBucket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//cmd variable substitution
+	trigger.Cmd = CmdSubstitute(trigger.Cmd, notify)
+
 	var cmdOut []byte = []byte{}
 	var cmdErr error = nil
 	if trigger.Type == "local" {
@@ -79,6 +82,9 @@ func GitHub(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "no trigger for notify:%#v", notify)
 		return
 	}
+
+	//cmd variable substitution
+	trigger.Cmd = CmdSubstitute(trigger.Cmd, notify)
 
 	var cmdOut []byte = []byte{}
 	var cmdErr error = nil

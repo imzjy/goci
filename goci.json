@@ -17,7 +17,7 @@
 				"SshUser" :    "zjy",
 				"SshHost" :    "www.imzjy.com",
 				"SshKey" :     "~/.ssh/id_rsa",
-				"Cmd" :        "ps aux"
+				"Cmd" :        "make #{branch}"
 			}
 		]
 }
