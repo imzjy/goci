@@ -22,6 +22,7 @@ type Trigger struct {
 	SshHost    string
 	SshKey     string
 	Cmd        string
+	Dir        string
 }
 
 func getConfigContent() ([]byte, error) {

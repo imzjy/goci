@@ -38,7 +38,7 @@ func BitBucket(w http.ResponseWriter, r *http.Request) {
 	var cmdOut []byte = []byte{}
 	var cmdErr error = nil
 	if trigger.Type == "local" {
-		cmdOut, cmdErr = ExecLocal(trigger.Cmd, "")
+		cmdOut, cmdErr = ExecLocal(trigger.Cmd, trigger.Dir)
 	}
 
 	if trigger.Type == "ssh" {
@@ -89,7 +89,7 @@ func GitHub(w http.ResponseWriter, r *http.Request) {
 	var cmdOut []byte = []byte{}
 	var cmdErr error = nil
 	if trigger.Type == "local" {
-		cmdOut, cmdErr = ExecLocal(trigger.Cmd, "")
+		cmdOut, cmdErr = ExecLocal(trigger.Cmd, trigger.Dir)
 	}
 
 	if trigger.Type == "ssh" {
