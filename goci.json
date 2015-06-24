@@ -3,12 +3,11 @@
     "triggers":
         [
             {
-                "issuer" :     "bitbucket",
+                "Issuer" :     "bitbucket",
                 "Repository" : "imzjy/wschat",
                 "Branch" :     "master",
                 "Type" :       "local",
-                "Cmd" :        "ps aux",
-                "Dir" :        "/home/ec2user/"
+                "Cmd" :        "cd /home/ec2usr && ls"
             },
             {
                 "Issuer" :     "github",
@@ -17,8 +16,8 @@
                 "Type" :       "ssh",
                 "SshUser" :    "zjy",
                 "SshHost" :    "www.imzjy.com",
-                "SshKey" :     "~/.ssh/id_rsa",
-                "Cmd" :        "make #{branch}"
+                "SshKey" :     "/home/ec2usr/.ssh/id_rsa",
+                "Cmd" :        "/home/ec2usr/dev && make #{branch}"
             }
         ]
 }
